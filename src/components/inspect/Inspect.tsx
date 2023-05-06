@@ -18,11 +18,12 @@ import {
 } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import ky from 'ky';
+import moment, { Moment } from 'moment';
 import React, { useState } from 'react';
 import { MdDelete } from 'react-icons/all';
 import { useDebounce } from 'react-use';
 import useTitle from '../../hooks/useTitle';
-import { InspectResponse } from '../../ts/interfaces';
+import { InspectResponse, ScrobbleDateRange } from '../../ts/interfaces';
 import Header from './Header';
 import NewTracks from './NewTracks';
 
@@ -35,9 +36,25 @@ const Inspect = ({ title }: { title: string }) => {
   const [page, setPage] = useState<number>(0);
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [show, setShow] = useState<string>('all');
-  const [start, setStart] = useState<Date | null>(null);
-  const [end, setEnd] = useState<Date | null>(null);
+  const [start, setStart] = useState<Moment>(moment.unix(0));
+  const [end, setEnd] = useState<Moment>(moment.unix(0));
   const queryClient = useQueryClient();
+  const { data } = useQuery(
+    ['scrobble-date-range'],
+    async () => await ky.get(
+      '/api/get_scrobble_date_range',
+      {
+        timeout: false,
+      },
+    ).json() as ScrobbleDateRange,
+    {
+      refetchOnWindowFocus: false,
+      onSuccess: (newData) => {
+        setStart(moment.unix(newData.start));
+        setEnd(moment.unix(newData.end));
+      },
+    },
+  );
   const { data: inspectData } = useQuery(
     ['matches', activeCol, filterDebounced, order, page, show, start, end],
     async () => await ky.get(
@@ -49,14 +66,15 @@ const Inspect = ({ title }: { title: string }) => {
           order,
           page: page as unknown as string,
           show,
-          ...(start && { start: start.toISOString() }),
-          ...(end && { end: end.toISOString() }),
+          ...(start.unix() !== data?.start && { start: start.toISOString() }),
+          ...(end.unix() !== data?.end && { end: end.toISOString() }),
         },
         timeout: false,
       },
     ).json() as InspectResponse,
     {
-      enabled: filterDebounced.length === 0 || filterDebounced.length > 2,
+      enabled: (start.unix() !== 0 || end.unix() !== 0)
+        && (filterDebounced.length === 0 || filterDebounced.length > 2),
       keepPreviousData: true,
       refetchOnWindowFocus: false,
     },
@@ -111,14 +129,6 @@ const Inspect = ({ title }: { title: string }) => {
     }
   };
 
-  const handleStartChange = (newValue: Date | null) => {
-    setStart(newValue);
-  };
-
-  const handleEndChange = (newValue: Date | null) => {
-    setEnd(newValue);
-  };
-
   const handleDeleteMatches = () => {
     ky.post(
       '/api/handle_delete_matches',
@@ -168,9 +178,9 @@ const Inspect = ({ title }: { title: string }) => {
           end={end}
           filter={filter}
           handleChipClick={handleChipClick}
-          handleEndChange={handleEndChange}
-          handleStartChange={handleStartChange}
+          setEnd={setEnd}
           setFilter={setFilter}
+          setStart={setStart}
           show={show}
           start={start}
         />

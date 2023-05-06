@@ -19,6 +19,7 @@ const App = () => {
     >
       <Navbar />
       <Typography
+        fontWeight={700}
         lineHeight={2}
         marginX={2}
         variant="h4"

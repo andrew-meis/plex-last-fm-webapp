@@ -13,6 +13,11 @@ from sqlalchemy import select
 from sqlalchemy.sql import and_, or_, asc, desc, func
 
 
+@app.route("/")
+def index():
+    return app.send_static_file('index.html')
+
+
 def jsonify_no_content():
     response = make_response('', 204)
     response.mimetype = 'application/json'
@@ -118,6 +123,17 @@ def get_next_unreviewed():
         for (a, b, c) in suggestions if b >= 60
     ]
     return jsonify(scrobble=schema.dump(next_unreviewed), status=True, suggestions=suggestions)
+
+
+@app.route("/api/get_scrobble_date_range", methods=['GET'])
+def get_scrobble_date_range():
+    first_scrobble = db.session.query(func.min(Scrobble.played_at)).first()
+    last_scrobble = db.session.query(func.max(Scrobble.played_at)).first()
+    print(first_scrobble[0])
+    return jsonify(
+        start=first_scrobble[0],
+        end=last_scrobble[0]
+    )
 
 
 @app.route("/api/handle_delete_matches", methods=['POST'])
