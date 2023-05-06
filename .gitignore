@@ -7,7 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-venv
+.venv
 __pycache__
 node_modules
 dist
