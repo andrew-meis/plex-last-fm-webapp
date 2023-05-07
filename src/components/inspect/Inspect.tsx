@@ -1,11 +1,11 @@
 import {
   Alert,
   Box,
-  Button,
   Checkbox,
-  Collapse,
   Grid,
+  IconButton,
   Paper,
+  SvgIcon,
   Table,
   TableBody,
   TableCell,
@@ -15,6 +15,7 @@ import {
   TablePagination,
   TableRow,
   TableSortLabel,
+  Tooltip,
 } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import ky from 'ky';
@@ -118,7 +119,7 @@ const Inspect = ({ title }: { title: string }) => {
     event.currentTarget.blur();
     if (colId !== activeCol) {
       setActiveCol(colId);
-      setOrder('asc');
+      setOrder(colId === 3 ? 'desc' : 'asc');
     }
     if (colId === activeCol && order === 'asc') {
       setOrder('desc');
@@ -154,25 +155,31 @@ const Inspect = ({ title }: { title: string }) => {
 
   return (
     <Box marginX={2}>
-      <Collapse in={selected.length > 0}>
-        <Alert
-          action={(
-            <Button
-              color="error"
-              size="small"
-              startIcon={<MdDelete />}
-              sx={{ fontWeight: 700, textTransform: 'none' }}
-              variant="outlined"
+      <Alert
+        action={(
+          <Tooltip arrow title="Remove Matches">
+            <IconButton
+              color="primary"
+              disabled={selected.length === 0}
+              sx={{ height: 30, width: 30 }}
               onClick={handleDeleteMatches}
             >
-              Remove Matches
-            </Button>
-          )}
-          severity="error"
-        >
-          {`${selected.length} selected`}
-        </Alert>
-      </Collapse>
+              <SvgIcon>
+                <MdDelete />
+              </SvgIcon>
+            </IconButton>
+          </Tooltip>
+        )}
+        severity="info"
+        sx={{
+          mb: 2,
+          '& .MuiAlert-action': {
+            padding: '3px 0 0 16px',
+          },
+        }}
+      >
+        {`${selected.length} selected`}
+      </Alert>
       <Grid container>
         <Header
           end={end}

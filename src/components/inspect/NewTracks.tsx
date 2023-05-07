@@ -1,9 +1,10 @@
 import {
-  Grid, Typography, Box, List, ListItem, ListItemText, Checkbox, Button,
+  Grid, Typography, Box, List, ListItem, ListItemText, Checkbox, IconButton, SvgIcon, Tooltip,
 } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import ky from 'ky';
 import React, { useState } from 'react';
+import { BsCheckLg } from 'react-icons/all';
 import { NewTracksData } from '../../ts/interfaces';
 
 const NewTracks = () => {
@@ -37,7 +38,10 @@ const NewTracks = () => {
         headers: { 'Content-type': 'application/json' },
         timeout: false,
       },
-    ).then(() => queryClient.refetchQueries(['new-tracks']));
+    ).then(() => {
+      setSelected([]);
+      queryClient.refetchQueries(['new-tracks']);
+    });
   };
 
   if (!data?.newTracks || isLoading) {
@@ -50,17 +54,18 @@ const NewTracks = () => {
         <Typography ml={0.5} variant="h6">
           Recently Added Tracks
         </Typography>
-        {selected.length > 0 && (
-          <Button
-            color="success"
-            size="small"
-            sx={{ fontWeight: 700, ml: 'auto', mr: 2, textTransform: 'none' }}
-            variant="outlined"
+        <Tooltip arrow title="Confirm">
+          <IconButton
+            color="primary"
+            disabled={selected.length === 0}
+            sx={{ height: 30, ml: 'auto', mr: 2, width: 30 }}
             onClick={handleDeleteNewTrack}
           >
-            Confirm
-          </Button>
-        )}
+            <SvgIcon>
+              <BsCheckLg />
+            </SvgIcon>
+          </IconButton>
+        </Tooltip>
       </Box>
       <Grid item xs={12}>
         <Box
@@ -76,11 +81,11 @@ const NewTracks = () => {
             new tracks in your Plex library.
             {data.newTracksCount > 0 && (
               <>
-                Confirm that any previous matches for these tracks are manually removed.
+                &nbsp;Confirm that any previous matches for these tracks are manually removed.
               </>
             )}
           </Typography>
-          <List dense sx={{ maxHeight: 36 * 6, overflow: 'scroll' }}>
+          <List dense sx={{ maxHeight: 36 * 5, overflow: 'scroll' }}>
             {data.newTracks.map((track) => (
               <ListItem
                 key={track.addedId}

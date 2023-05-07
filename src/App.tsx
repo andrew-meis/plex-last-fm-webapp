@@ -9,13 +9,13 @@ const App = () => {
   return (
     <Box
       bgcolor="#fefefe"
-      borderBottom="1px dashed #ddd"
       borderLeft="1px dashed #ddd"
       borderRight="1px dashed #ddd"
-      height="fit-content"
       margin="auto"
+      maxHeight="100vh"
       maxWidth="lg"
-      minHeight="80vh"
+      minHeight="100vh"
+      overflow="scroll"
     >
       <Navbar />
       <Typography

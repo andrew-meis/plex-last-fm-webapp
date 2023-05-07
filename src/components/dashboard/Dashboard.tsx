@@ -1,5 +1,5 @@
 import { LoadingButton } from '@mui/lab';
-import { Box, Grid, Typography } from '@mui/material';
+import { Alert, Box, Grid, Typography } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import ky from 'ky';
 import { useState } from 'react';
@@ -68,6 +68,17 @@ const Dashboard = ({ title }: { title: string }) => {
 
   return (
     <Box marginX={2}>
+      {data.newTracksCount > 0 && (
+        <Alert
+          severity="info"
+          sx={{
+            mb: 2,
+          }}
+        >
+          {`${data.newTracksCount} new tracks in your Plex library.
+          Remove prior matches for these tracks in the Inspect tab.`}
+        </Alert>
+      )}
       <Grid container>
         <Grid item xs={12}>
           <Typography ml={0.5} variant="h6">

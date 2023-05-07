@@ -4,7 +4,7 @@ import {
 import { useQueryClient } from '@tanstack/react-query';
 import moment, { Moment } from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
-import { FcEmptyFilter } from 'react-icons/all';
+import { FiFilter } from 'react-icons/all';
 
 interface HeaderProps {
   end: Moment | null;
@@ -132,7 +132,7 @@ const Header = ({
           Apply
         </Button>
         <Button
-          color="warning"
+          color="error"
           size="small"
           sx={{ fontWeight: 700, maxHeight: 30, ml: 1, textTransform: 'none' }}
           variant="outlined"
@@ -145,7 +145,7 @@ const Header = ({
       <TextField
         InputProps={{
           endAdornment: (
-            <SvgIcon sx={{ width: '0.9em', height: '0.9em' }}><FcEmptyFilter /></SvgIcon>
+            <SvgIcon color="primary" sx={{ width: '0.9em', height: '0.9em' }}><FiFilter /></SvgIcon>
           ),
         }}
         placeholder="Filter scrobbles..."
