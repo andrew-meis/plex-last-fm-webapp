@@ -1,5 +1,17 @@
 import { LoadingButton } from '@mui/lab';
-import { Alert, Box, Grid, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Grid,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import ky from 'ky';
 import { useState } from 'react';
@@ -182,6 +194,60 @@ const Dashboard = ({ title }: { title: string }) => {
               { data.processCount }
             </Typography>
           </Box>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography ml={0.5} variant="h6">
+            Top Unmatched Tracks (last 30 days)
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TableContainer component={Paper} elevation={0}>
+            <Table size="small" sx={{ borderCollapse: 'separate', marginBottom: 2 }} width="100%">
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    align="center"
+                    sx={{ minWidth: '20px', p: 1 }}
+                  >
+                    <b>#</b>
+                  </TableCell>
+                  <TableCell align="center" sx={{ width: 'calc(100% - 60px)', p: 1 }}>
+                    <b>Last.fm Scrobble</b>
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{ minWidth: '40px', p: 1 }}
+                  >
+                    <b>Plays</b>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.topUnmatched.map((unmatched, index) => (
+                  <TableRow
+                    hover
+                    key={unmatched.id}
+                  >
+                    <TableCell
+                      align="center"
+                      sx={{ minWidth: '20px', p: 1 }}
+                    >
+                      {index + 1}
+                    </TableCell>
+                    <TableCell sx={{ width: 'calc(100% - 60px)', p: 1 }}>
+                      {unmatched.concatLastfm}
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{ minWidth: '40px', p: 1 }}
+                    >
+                      {unmatched.playcount}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Grid>
       </Grid>
     </Box>

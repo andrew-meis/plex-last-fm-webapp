@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import sqlalchemy
 import sqlite3
+import time
 import uuid
 from app import app, db
 from app.models import Account, AccountSchema, AddedTrack, Match, MatchSchema, Plex, PlexSchema, Scrobble, ScrobbleSchema
@@ -181,6 +182,7 @@ def handle_no_match():
 
 @app.route("/api/home_data", methods=['GET'])
 def home_data():
+    schema = MatchSchema()
     account = db.session.query(Account).first()
     if account is None:
         return jsonify(status="no account")
@@ -192,6 +194,19 @@ def home_data():
     plex_count = db.session.query(Plex).count()
     process_count = db.session.query(Scrobble).filter(Scrobble.status == 'matched').count()
     new_tracks_count = db.session.query(AddedTrack).count()
+    match_filter = Match.plex_id == 0
+    current_time_minus_30d = int(time.time()) - 2592000
+    date_filter = and_(True, Scrobble.played_at >= current_time_minus_30d)
+    query_filter = and_(True, match_filter, date_filter)
+    top_recent_unmatched = (db.session.query(Match, func.count(Scrobble.match_id))
+                            .join(Scrobble)
+                            .filter(query_filter)
+                            .group_by(Match)
+                            .order_by(desc(func.count(Scrobble.match_id)))
+                            .limit(15).all())
+    matches = schema.dump([item[0] for item in top_recent_unmatched], many=True)
+    for idx, row in enumerate(matches):
+      row['playcount'] = top_recent_unmatched[idx][1]
     return jsonify(
         lastHexUpdate=account.last_hex_update,
         scrobbleCount=scrobble_count,
@@ -199,7 +214,8 @@ def home_data():
         unreviewedCount=unreviewed_count,
         plexCount=plex_count,
         processCount=process_count,
-        newTracksCount=new_tracks_count
+        newTracksCount=new_tracks_count,
+        topUnmatched=matches
     )
 
 

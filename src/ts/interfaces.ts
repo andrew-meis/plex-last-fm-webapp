@@ -12,17 +12,6 @@ export interface NewTrack {
   concatPlex: string;
 }
 
-export interface HomeData {
-  lastHexUpdate: string;
-  matchedCount: number;
-  scrobbleCount: number;
-  status: string;
-  plexCount: number;
-  processCount: number;
-  unreviewedCount: number;
-  newTracksCount: number;
-}
-
 export interface NewTracksData {
   newTracks: NewTrack[];
   newTracksCount: number;
@@ -49,6 +38,18 @@ export interface InspectMatch {
   playcount: number;
   plexTrack: PlexTrack;
   scrobbles: number[];
+}
+
+export interface HomeData {
+  lastHexUpdate: string;
+  matchedCount: number;
+  scrobbleCount: number;
+  status: string;
+  plexCount: number;
+  processCount: number;
+  unreviewedCount: number;
+  newTracksCount: number;
+  topUnmatched: InspectMatch[];
 }
 
 export interface Scrobble {
