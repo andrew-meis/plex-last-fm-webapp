@@ -182,6 +182,7 @@ def handle_no_match():
 
 @app.route("/api/home_data", methods=['GET'])
 def home_data():
+    days = int(request.args.get('days'))
     schema = MatchSchema()
     account = db.session.query(Account).first()
     if account is None:
@@ -195,8 +196,8 @@ def home_data():
     process_count = db.session.query(Scrobble).filter(Scrobble.status == 'matched').count()
     new_tracks_count = db.session.query(AddedTrack).count()
     match_filter = Match.plex_id == 0
-    current_time_minus_30d = int(time.time()) - 2592000
-    date_filter = and_(True, Scrobble.played_at >= current_time_minus_30d)
+    current_time_minus_days = int(time.time()) - (86400 * days)
+    date_filter = and_(True, Scrobble.played_at >= current_time_minus_days)
     query_filter = and_(True, match_filter, date_filter)
     top_recent_unmatched = (db.session.query(Match, func.count(Scrobble.match_id))
                             .join(Scrobble)

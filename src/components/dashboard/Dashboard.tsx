@@ -3,6 +3,7 @@ import {
   Alert,
   Box,
   Grid,
+  NativeSelect,
   Paper,
   Table,
   TableBody,
@@ -22,13 +23,23 @@ import InfoCard from './InfoCard';
 
 const Dashboard = ({ title }: { title: string }) => {
   useTitle(title);
+  const [days, setDays] = useState(30);
   const [isProcessing, setProcessing] = useState(false);
   const [isUpdating, setUpdating] = useState(false);
   const queryClient = useQueryClient();
   const { data, isLoading } = useQuery(
-    ['home'],
-    async () => await ky.get('/api/home_data', { timeout: false }).json() as HomeData,
+    ['home', days],
+    async () => await ky.get(
+      '/api/home_data',
+      {
+        timeout: false,
+        searchParams: {
+          days,
+        },
+      },
+    ).json() as HomeData,
     {
+      keepPreviousData: true,
       refetchOnWindowFocus: false,
     },
   );
@@ -56,11 +67,7 @@ const Dashboard = ({ title }: { title: string }) => {
     };
   };
 
-  if (isLoading) {
-    return null;
-  }
-
-  if (!data) {
+  if (isLoading || !data) {
     return null;
   }
 
@@ -195,10 +202,23 @@ const Dashboard = ({ title }: { title: string }) => {
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item display="flex" justifyContent="space-between" xs={12}>
           <Typography ml={0.5} variant="h6">
-            Top Unmatched Tracks (last 30 days)
+            Top Unmatched Tracks
           </Typography>
+          <NativeSelect
+            defaultValue={days}
+            sx={{
+              width: '16ch',
+            }}
+            onChange={(e) => setDays(e.target.value as unknown as number)}
+          >
+            <option value={14}>Last 14 days</option>
+            <option value={30}>Last 30 days</option>
+            <option value={90}>Last 90 days</option>
+            <option value={180}>Last 180 days</option>
+            <option value={365}>Last 365 days</option>
+          </NativeSelect>
         </Grid>
         <Grid item xs={12}>
           <TableContainer component={Paper} elevation={0}>
