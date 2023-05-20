@@ -114,6 +114,7 @@ def delete_new_track():
 def get_next_unreviewed():
     schema = ScrobbleSchema()
     next_unreviewed = db.session.query(Scrobble).filter(Scrobble.match_id == sqlalchemy.null()).first()
+    unreviewed_count = db.session.query(Scrobble).filter(Scrobble.match_id == sqlalchemy.null()).count()
     if next_unreviewed is None:
         return jsonify(status=False)
     query = select(Plex)
@@ -123,7 +124,12 @@ def get_next_unreviewed():
         {'concatPlex': str(df.at[c, 'concat_plex']), 'id': int(df.at[c, 'id'])}
         for (a, b, c) in suggestions if b >= 60
     ]
-    return jsonify(scrobble=schema.dump(next_unreviewed), status=True, suggestions=suggestions)
+    return jsonify(
+        scrobble=schema.dump(next_unreviewed),
+        status=True,
+        suggestions=suggestions,
+        unreviewedCount=unreviewed_count
+      )
 
 
 @app.route("/api/get_scrobble_date_range", methods=['GET'])

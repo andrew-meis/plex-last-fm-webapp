@@ -13,6 +13,7 @@ import {
   Button,
   ListItem,
   Paper,
+  LinearProgress,
 } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import ky from 'ky';
@@ -40,8 +41,11 @@ const customRadio = (
   />
 );
 
+const normalize = (value: number, max: number) => ((value) * 100) / (max);
+
 const Match = ({ title }: { title: string }) => {
   useTitle(title);
+  const [totalUnreviewed, setTotalUnreviewed] = useState(0);
   const [disabled, setDisabled] = useState(false);
   const [input, setInput] = useState('');
   const [match, setMatch] = useState<Suggestion | PlexTrack | null>();
@@ -56,6 +60,11 @@ const Match = ({ title }: { title: string }) => {
     ).json() as MatchResponse,
     {
       refetchOnWindowFocus: false,
+      onSuccess: (data) => {
+        if (totalUnreviewed === 0) {
+          setTotalUnreviewed(data.unreviewedCount);
+        }
+      },
     },
   );
   const { data: options } = useQuery(
@@ -221,6 +230,24 @@ const Match = ({ title }: { title: string }) => {
           >
             No match!
           </Button>
+          <Box
+            display="flex"
+            flexDirection="column"
+            flexGrow={1}
+            justifyContent="center"
+            mt={1}
+            mx={2}
+          >
+            <LinearProgress
+              value={
+                normalize(totalUnreviewed - (unreviewed?.unreviewedCount || 0), totalUnreviewed)
+              }
+              variant="determinate"
+            />
+            <Typography textAlign="center" variant="subtitle2">
+              {`${unreviewed?.unreviewedCount} scrobbles remaining`}
+            </Typography>
+          </Box>
           <Button
             color="success"
             disabled={!match || disabled}

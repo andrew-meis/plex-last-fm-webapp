@@ -12,8 +12,10 @@ __pycache__
 node_modules
 dist
 dist-ssr
+migrations
 *.local
 api/app/app.db
+api/app/app_test.db
 
 # Editor directories and files
 .vscode/*

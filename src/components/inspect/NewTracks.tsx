@@ -1,5 +1,16 @@
 import {
-  Grid, Typography, Box, List, ListItem, ListItemText, Checkbox, IconButton, SvgIcon, Tooltip,
+  Grid,
+  Typography,
+  Box,
+  List,
+  ListItem,
+  ListItemText,
+  Checkbox,
+  IconButton,
+  SvgIcon,
+  Tooltip,
+  Collapse,
+  Chip,
 } from '@mui/material';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import ky from 'ky';
@@ -49,66 +60,71 @@ const NewTracks = () => {
   }
 
   return (
-    <Grid item mb={2} xs={12}>
-      <Box display="flex" py={1} width={1}>
-        <Typography ml={0.5} variant="h6">
+    <Grid item sx={{ backgroundColor: '#fafafa', mb: 2, borderRadius: '4px' }} xs={12}>
+      <Box alignItems="center" display="flex" py={1} width={1}>
+        <Typography ml={2} variant="h6">
           Recently Added Tracks
         </Typography>
-        <Tooltip arrow title="Confirm">
-          <IconButton
-            color="primary"
-            disabled={selected.length === 0}
-            sx={{ height: 30, ml: 'auto', mr: 2, width: 30 }}
-            onClick={handleDeleteNewTrack}
-          >
-            <SvgIcon>
-              <BsCheckLg />
-            </SvgIcon>
-          </IconButton>
-        </Tooltip>
+        <Chip
+          color={data.newTracksCount > 0 ? 'primary' : 'default'}
+          label={data.newTracksCount}
+          size="small"
+          sx={{
+            ml: 1,
+          }}
+        />
       </Box>
-      <Grid item xs={12}>
-        <Box
-          display="flex"
-          flexDirection="column"
-          justifyContent="space-between"
-          padding={3}
-          sx={{ backgroundColor: '#fafafa', m: '4px', borderRadius: '4px' }}
-        >
-          <Typography textAlign="center">
-            There are
-            <b>{` ${data.newTracksCount} `}</b>
-            new tracks in your Plex library.
-            {data.newTracksCount > 0 && (
-              <>
-                &nbsp;Confirm that any previous matches for these tracks are manually removed.
-              </>
-            )}
-          </Typography>
-          <List dense sx={{ maxHeight: 36 * 5, overflow: 'scroll' }}>
-            {data.newTracks.map((track) => (
-              <ListItem
-                key={track.addedId}
-                secondaryAction={(
-                  <Checkbox
-                    checked={selected.includes(track.addedId)}
-                  />
-                )}
-                sx={{
-                  '&:hover': {
-                    backgroundColor: 'action.hover',
-                  },
-                }}
-                onClick={(e) => handleClick(e, track.addedId)}
-              >
-                <ListItemText>
-                  {track.concatPlex}
-                </ListItemText>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </Grid>
+      <Collapse in={data.newTracksCount > 0}>
+        <Grid item xs={12}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="space-between"
+            paddingBottom={1}
+            paddingX={3}
+          >
+            <Box alignItems="center" display="flex">
+              <Typography>
+                Confirm that any previous matches for these tracks are manually removed.
+              </Typography>
+              <Tooltip arrow title="Confirm">
+                <IconButton
+                  color="primary"
+                  disabled={selected.length === 0}
+                  sx={{ height: 30, ml: 'auto', width: 30 }}
+                  onClick={handleDeleteNewTrack}
+                >
+                  <SvgIcon>
+                    <BsCheckLg />
+                  </SvgIcon>
+                </IconButton>
+              </Tooltip>
+            </Box>
+            <List dense sx={{ maxHeight: 36 * 5, overflow: 'scroll' }}>
+              {data.newTracks.map((track) => (
+                <ListItem
+                  key={track.addedId}
+                  secondaryAction={(
+                    <Checkbox
+                      checked={selected.includes(track.addedId)}
+                    />
+                  )}
+                  sx={{
+                    '&:hover': {
+                      backgroundColor: 'action.hover',
+                    },
+                  }}
+                  onClick={(e) => handleClick(e, track.addedId)}
+                >
+                  <ListItemText>
+                    {track.concatPlex}
+                  </ListItemText>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        </Grid>
+      </Collapse>
     </Grid>
   );
 };

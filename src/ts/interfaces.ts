@@ -79,6 +79,7 @@ export interface MatchResponse {
   scrobble: Scrobble;
   status: boolean;
   suggestions: Suggestion[];
+  unreviewedCount: number;
 }
 
 export interface ScrobbleDateRange {

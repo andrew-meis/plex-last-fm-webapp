@@ -155,32 +155,8 @@ const Inspect = ({ title }: { title: string }) => {
 
   return (
     <Box marginX={2}>
-      <Alert
-        action={(
-          <Tooltip arrow title="Remove Matches">
-            <IconButton
-              color="primary"
-              disabled={selected.length === 0}
-              sx={{ height: 30, width: 30 }}
-              onClick={handleDeleteMatches}
-            >
-              <SvgIcon>
-                <MdDelete />
-              </SvgIcon>
-            </IconButton>
-          </Tooltip>
-        )}
-        severity="info"
-        sx={{
-          mb: 2,
-          '& .MuiAlert-action': {
-            padding: '3px 0 0 16px',
-          },
-        }}
-      >
-        {`${selected.length} selected`}
-      </Alert>
       <Grid container>
+        <NewTracks />
         <Header
           end={end}
           filter={filter}
@@ -296,8 +272,32 @@ const Inspect = ({ title }: { title: string }) => {
             </Table>
           </TableContainer>
         </Grid>
-        <NewTracks />
       </Grid>
+      <Alert
+        action={(
+          <Tooltip arrow title="Remove Matches">
+            <IconButton
+              color="primary"
+              disabled={selected.length === 0}
+              sx={{ height: 30, width: 30 }}
+              onClick={handleDeleteMatches}
+            >
+              <SvgIcon>
+                <MdDelete />
+              </SvgIcon>
+            </IconButton>
+          </Tooltip>
+        )}
+        severity="info"
+        sx={{
+          mb: 2,
+          '& .MuiAlert-action': {
+            padding: '3px 0 0 16px',
+          },
+        }}
+      >
+        {`${selected.length} selected`}
+      </Alert>
     </Box>
   );
 };
