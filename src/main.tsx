@@ -1,3 +1,4 @@
+import '@fontsource/arimo';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

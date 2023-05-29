@@ -18,7 +18,7 @@ import {
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import ky from 'ky';
 import React, { useState } from 'react';
-import { FcCheckmark } from 'react-icons/all';
+import { FcCheckmark, GrLastfm, SiPlex } from 'react-icons/all';
 import useTitle from '../../hooks/useTitle';
 import { MatchResponse, PlexTrack, Suggestion } from '../../ts/interfaces';
 
@@ -164,16 +164,38 @@ const Match = ({ title }: { title: string }) => {
   return (
     <Box marginX={2}>
       <Grid container>
-        <Grid item textAlign="center" xs={12}>
+        <Grid
+          item
+          alignItems="center"
+          border="1px solid #d31f27"
+          borderRadius={1}
+          display="flex"
+          xs={12}
+        >
+          <SvgIcon sx={{ padding: 3, color: '#d31f27' }}>
+            <GrLastfm />
+          </SvgIcon>
           <Typography variant="h6">
             {unreviewed?.scrobble.concatLastfm}
           </Typography>
-          <span style={{ height: '4px' }} />
+        </Grid>
+        <Grid
+          item
+          alignItems="center"
+          border="1px solid #e5a00d"
+          borderRadius={1}
+          display="flex"
+          mt={1}
+          xs={12}
+        >
+          <SvgIcon sx={{ padding: 3, color: '#e5a00d' }}>
+            <SiPlex />
+          </SvgIcon>
           <Typography variant="h6">
             {match?.concatPlex || '~'}
           </Typography>
         </Grid>
-        <Grid item display="flex" justifyContent="center" mx="40px" xs={12}>
+        <Grid item display="flex" justifyContent="center" mt={1} mx={3} xs={12}>
           <FormControl sx={{ width: 1 }}>
             <Box height="205px">
               <FormLabel>
