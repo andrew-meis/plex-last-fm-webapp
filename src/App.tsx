@@ -8,6 +8,18 @@ import { Outlet } from 'react-router-dom';
 import Navbar from './components/Navbar';
 
 const theme = extendTheme({
+  colorSchemes: {
+    light: {
+      palette: {
+        warning: {
+          dark: '#e5a00d',
+          light: '#f7c985',
+          main: '#efb453',
+          contrastText: '#ffffff',
+        },
+      },
+    },
+  },
   components: {
     MuiTypography: {
       styleOverrides: {

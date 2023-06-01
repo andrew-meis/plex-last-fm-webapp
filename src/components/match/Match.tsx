@@ -178,6 +178,22 @@ const Match = ({ title }: { title: string }) => {
           <Typography variant="h6">
             {unreviewed?.scrobble.concatLastfm}
           </Typography>
+          <Box
+            display="flex"
+            flexShrink={0}
+            marginLeft="auto"
+            width={120}
+          >
+            <Button
+              color="error"
+              disabled={disabled}
+              sx={{ fontWeight: 700, m: 'auto', textTransform: 'none', width: 105 }}
+              variant="contained"
+              onClick={handleNoMatchButton}
+            >
+              No match!
+            </Button>
+          </Box>
         </Grid>
         <Grid
           item
@@ -194,6 +210,22 @@ const Match = ({ title }: { title: string }) => {
           <Typography variant="h6">
             {match?.concatPlex || '~'}
           </Typography>
+          <Box
+            display="flex"
+            flexShrink={0}
+            marginLeft="auto"
+            width={120}
+          >
+            <Button
+              color="warning"
+              disabled={!match || disabled}
+              sx={{ fontWeight: 700, m: 'auto', textTransform: 'none', width: 105 }}
+              variant="contained"
+              onClick={handleMatchButton}
+            >
+              Match
+            </Button>
+          </Box>
         </Grid>
         <Grid item display="flex" justifyContent="center" mt={1} mx={3} xs={12}>
           <FormControl sx={{ width: 1 }}>
@@ -242,16 +274,7 @@ const Match = ({ title }: { title: string }) => {
             />
           </FormControl>
         </Grid>
-        <Grid item display="flex" justifyContent="space-between" mt="8px" mx="40px" xs={12}>
-          <Button
-            color="error"
-            disabled={disabled}
-            sx={{ fontWeight: 700, textTransform: 'none' }}
-            variant="contained"
-            onClick={handleNoMatchButton}
-          >
-            No match!
-          </Button>
+        <Grid item display="flex" justifyContent="space-between" mt={1} mx={3} xs={12}>
           <Box
             display="flex"
             flexDirection="column"
@@ -270,15 +293,6 @@ const Match = ({ title }: { title: string }) => {
               {`${unreviewed?.unreviewedCount} scrobbles remaining`}
             </Typography>
           </Box>
-          <Button
-            color="success"
-            disabled={!match || disabled}
-            sx={{ fontWeight: 700, textTransform: 'none' }}
-            variant="contained"
-            onClick={handleMatchButton}
-          >
-            Match
-          </Button>
         </Grid>
       </Grid>
     </Box>
