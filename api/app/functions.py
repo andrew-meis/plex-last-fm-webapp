@@ -212,7 +212,7 @@ def delete_orphan_match_rows():
     return
 
 
-def delete_single_plex_play(scrobble, guids):
+def delete_single_plex_play(scrobble, guids=[]):
     account = db.session.query(Account).first()
     delete_sql = '''DELETE FROM metadata_item_views WHERE account_id=? AND viewed_at=? AND guid=?'''
     update_sql = '''UPDATE metadata_item_settings
