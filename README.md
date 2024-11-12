@@ -29,6 +29,6 @@ Finally, a web interface provides the user with options to remove matches, match
 |:--:| 
 | *Web interface dashboard* |
 
-| ![matching-interface.png](https://github.com/andrew-meis/plex-last-fm-webapp/blob/main/public/dashboard-cropped.png?raw=true) | 
+| ![matching-interface.png](https://github.com/andrew-meis/plex-last-fm-webapp/blob/main/public/matching-interface.png?raw=true) | 
 |:--:| 
 | *Web track matching interface with fuzzy search suggestions* |
