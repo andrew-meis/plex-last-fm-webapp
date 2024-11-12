@@ -24,3 +24,6 @@ Finally, a web interface provides the user with options to remove matches, match
 - Efficient -> able to handle 100k+ data operations in seconds
 - Maintainable -> separation of frontend and backend logic allows for incremental enhancements 
 - User friendly -> web interface provides intuitive tools for data manipulation, including tables with various filter capabilities, a dashboard with quick stats, and a matching interface that offers suggestions based on fuzzy string matching
+| ![dashboard-cropped.png](https://github.com/andrew-meis/plex-last-fm-webapp/blob/main/public/dashboard-cropped.png?raw=true) | 
+|:--:| 
+| *Web interface dashboard* |
